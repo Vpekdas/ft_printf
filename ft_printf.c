@@ -6,29 +6,75 @@ static void	ft_putchar(const char c)
 	write(1, &c, 1);
 }
 
-int	ft_handle_sharp(const char c, va_list ap)
+void	ft_putnbr_base(int nbr, char *base)
+{
+	long int		i;
+	char			result [100];
+	long int		nb;
+
+	if (nbr == 0)
+		ft_putchar(base[0]);
+	i = 0;
+	nb = nbr;
+	if (nb < 0)
+	{
+		ft_putchar('-');
+		nb *= -1;
+	}
+	while (nb > 0)
+	{
+		result[i] = base[nb % ft_strlen(base)];
+		nb /= ft_strlen(base);
+		i++;
+	}
+	while (i > 0)
+		ft_putchar(result[i-- - 1]);
+}
+
+void ft_handle_sharp(const char *fmt, va_list ap)
+{
+	int	value;
+
+	value = va_arg(ap, int);
+	if (*fmt == '#')
+	*fmt++;
+	if (*fmt == 'o')
+	{
+		write(1, "0", 1);
+		ft_putnbr_base(value, "01234567");
+	}
+	else if (*fmt == 'x')
+	{
+		write(1, "0", 1);
+		write(1, &*fmt, 1);
+		ft_putnbr_base(value, "0123456789abcdef");
+	}
+	else if (*fmt == 'X')
+	{
+		write(1, "0", 1);
+		write(1, &*fmt, 1);
+		ft_putnbr_base(value, "0123456789ABCDEF");
+	}
+}
+
+void	ft_handle_space(const char *fmt, va_list ap)
+{
+	
+}
+
+int	ft_handle_plus(const char *fmt, va_list ap)
 {
 	return (0);
 }
 
-int	ft_handle_space(const char c, va_list ap)
+int	ft_handle_flags(const char *fmt, va_list ap)
 {
-	return (0);
-}
-
-int	ft_handle_plus(const char c, va_list ap)
-{
-	return (0);
-}
-
-int	ft_handle_flags(const char c, va_list ap)
-{
-	if (c == '#')
-		ft_handle_sharp(c, ap);
-	else if (c == ' ')
-		ft_handle_space(c, ap);
-	else if (c == '+')
-		ft_handle_plus(c, ap);
+	if (*fmt == '#')
+		ft_handle_sharp(fmt, ap);
+	else if (*fmt == ' ')
+		ft_handle_space(fmt, ap);
+	else if (*fmt == '+')
+		ft_handle_plus(fmt, ap);
 	return (0);
 }
 
@@ -47,37 +93,28 @@ int	ft_printf(const char *fmt, ...)
 			if (*fmt == '%')
 				ft_putchar('%');
 			else if (*fmt == '#' || *fmt == ' ' || *fmt == '+')
-				ft_handle_flags(*fmt, ap);
+			{
+				ft_handle_flags(fmt, ap);
+				*fmt++;
+			}
 		}
-		return (0);
+		*fmt++;
 	}
 	va_end(ap);
+	return (0);
 }
 
 #include <stdio.h>
 
 int main() {
     int num = 42;
-    double floatValue = 12.345;
-    
-    // Demonstrating the # flag.
-    printf("%#o\n", num);       // Outputs "052" with the # flag for octal.
-    printf("%#x\n", num);       // Outputs "0x2a" with the # flag for hexadecimal.
-    printf("%#f\n", floatValue); // Outputs "12.345000" with the # flag for floating-point.
 
-    // Demonstrating the + flag.
-    printf("%+d\n", num);       // Outputs "+42" with the + flag for positive numbers.
-    printf("%+d\n", -num);      // Outputs "-42" with the + flag for negative numbers.
-    printf("%+f\n", floatValue); // Outputs "+12.345000" with the + flag for positive floating-point.
-    printf("%+f\n", -floatValue); // Outputs "-12.345000" with the + flag for negative floating-point.
-
-    // Demonstrating the space flag.
-    printf("% d\n", num);       // Outputs " 42" with a space for positive numbers.
-    printf("% d\n", -num);      // Outputs "-42" with a minus sign for negative numbers.
-    printf("% d\n", 0);         // Outputs " 0" with a space for zero.
-    printf("% f\n", floatValue); // Outputs " 12.345000" with a space for positive floating-point.
-    printf("% f\n", -floatValue); // Outputs "-12.345000" with a minus sign for negative floating-point.
-
+	ft_printf("%#o\n", num);
+	printf("%#o\n", num);
+	ft_printf("%#x\n", num);
+	printf("%#x\n", num);
+	ft_printf("%#X\n", num);
+	printf("%#X\n", num);
     return 0;
 }
 
