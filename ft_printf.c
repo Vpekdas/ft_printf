@@ -144,60 +144,36 @@ void	ft_handle_flags(const char *fmt, va_list ap)
 		ft_handle_plus(fmt, ap);
 }
 
-void	ft_handle_s(const char *fmt, va_list ap)
+void	ft_handle_s(const char *str)
 {
-	char	*str;
-
-	if (*fmt == 's')
-	{
-		str = va_arg(ap, char*);
-		if (str != NULL)
-			ft_putstr(str);
-	}
+	if (str != NULL)
+		ft_putstr(str);
 }
 
-void	ft_handle_u(const char *fmt, va_list ap)
+void	ft_handle_u(unsigned int value)
 {
-	unsigned int	u_value;
-
-	if (*fmt == 'u')
-	{
-		u_value = va_arg(ap, unsigned int);
-		ft_putnbr(u_value);
-	}
+	ft_putnbr(value);
 }
 
-void	ft_handle_d_i(const char *fmt, va_list ap)
+void	ft_handle_d_i(int value)
 {
-	int				value;
-
-	if (*fmt == 'd' || *fmt == 'i')
-	{
-		value = va_arg(ap, int);
-		ft_putnbr(value);
-	}
+	ft_putnbr(value);
 }
 
-void	ft_handle_x_X(const char *fmt, va_list ap)
+void	ft_handle_x_X(const char c, int value)
 {
-	int	value;
-
-	value = va_arg(ap, int);
-	if (*fmt == 'x')
+	if (c == 'x')
 	{
 		ft_putnbr_base(value, "0123456789abcdef");
 	}
-	else if (*fmt == 'X')
+	else if (c == 'X')
 	{
 		ft_putnbr_base(value, "0123456789ABCDEF");
 	}
 }
 
-void	ft_handle_p(const char *fmt, va_list ap)
+void	ft_handle_p(void* ptr)
 {
-	void	*ptr;
-
-	ptr = va_arg(ap, void *);
 	if (ptr != NULL)
 	{
 		write(1, "0x", 3);
@@ -231,17 +207,17 @@ int	ft_printf(const char *fmt, ...)
 				*fmt++;
 			}
 			else if (*fmt == 's')
-				ft_handle_s(fmt, ap);
+				ft_handle_s(va_arg(ap, char*));
 			else if (*fmt == 'c')
 				ft_handle_c(va_arg(ap, char));
 			else if (*fmt == 'd' || *fmt == 'i')
-				ft_handle_d_i(fmt, ap);
+				ft_handle_d_i(va_arg(ap, int));
 			else if (*fmt == 'u')
-				ft_handle_u(fmt,*fmt);
+				ft_handle_u(va_arg(ap, unsigned int));
 			else if (*fmt == 'x' || *fmt == 'X')
-				ft_handle_x_X(fmt, ap);
+				ft_handle_x_X(*fmt, va_arg(ap, int));
 			else if (*fmt == 'p')
-				ft_handle_p(fmt, ap);
+				ft_handle_p(va_arg(ap, void*));
 		}
 		*fmt++;
 	}
@@ -252,10 +228,6 @@ int	ft_printf(const char *fmt, ...)
 #include <stdio.h>
 
 int main() {
-	int	c = 'a';
-	int	c1 = 'b';
-	int	c2 = 'c';
-	ft_printf("c : %c : c1 %c : c2 %c\n", c, c1, c2);
-	printf("c : %c : c1 %c : c2 %c\n", c, c1, c2);
+	
 }
 
