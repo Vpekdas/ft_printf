@@ -14,7 +14,7 @@ static void	ft_putchar(const char c)
 	write(1, &c, 1);
 }
 
-void	ft_putstr(char *str)
+void	ft_putstr(const char *str)
 {
 	int	i;
 
@@ -73,7 +73,7 @@ void	ft_putnbr_base(int nbr, char *base)
 void ft_handle_sharp(int value, const char *fmt)
 {
 	if (*fmt == '#')
-	*fmt++;
+	fmt++;
 	if (*fmt == 'o')
 	{
 		write(1, "0", 1);
@@ -96,7 +96,7 @@ void ft_handle_sharp(int value, const char *fmt)
 void	ft_handle_space(int value, const char *fmt)
 {
 	if (*fmt == ' ')
-	*fmt++;
+	fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		if (value >= 0)
@@ -112,7 +112,7 @@ void	ft_handle_space(int value, const char *fmt)
 void	ft_handle_plus(int value, const char *fmt)
 {
 	if (*fmt == '+')
-	*fmt++;
+	fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		if (value >= 0)
@@ -123,16 +123,6 @@ void	ft_handle_plus(int value, const char *fmt)
 		else
 			ft_putnbr(value);
 	}
-}
-
-void	ft_handle_flags(const char *fmt, va_list ap)
-{
-	if (*fmt == '#')
-		ft_handle_sharp(fmt, ap);
-	else if (*fmt == ' ')
-		ft_handle_space(fmt, ap);
-	else if (*fmt == '+')
-		ft_handle_plus(fmt, ap);
 }
 
 void	ft_handle_s(const char *str)
@@ -172,7 +162,7 @@ void	ft_handle_p(void* ptr)
 	}
 }
 
-void	ft_handle_c(char const fmt)
+void	ft_handle_c(int fmt)
 {
 	if (ft_isprint(fmt))
 		ft_putchar(fmt);
@@ -189,28 +179,28 @@ int	ft_printf(const char *fmt, ...)
 			ft_putchar(*fmt);
 		else
 		{
-			*fmt++;
+			fmt++;
 			if (*fmt == '%')
 				ft_putchar('%');
 			else if (*fmt == '#')
 			{
 				ft_handle_sharp(va_arg(ap, int), fmt);
-				*fmt++;
+				fmt++;
 			}
 			else if (*fmt == ' ')
 			{
 				ft_handle_space(va_arg(ap, int), fmt);
-				*fmt++;
+				fmt++;
 			}
 			else if (*fmt == '+')
 			{
 				ft_handle_plus(va_arg(ap, int), fmt);
-				*fmt++;
+				fmt++;
 			}
 			else if (*fmt == 's')
 				ft_handle_s(va_arg(ap, char*));
 			else if (*fmt == 'c')
-				ft_handle_c(va_arg(ap, char));
+				ft_handle_c(va_arg(ap, int));
 			else if (*fmt == 'd' || *fmt == 'i')
 				ft_handle_d_i(va_arg(ap, int));
 			else if (*fmt == 'u')
@@ -220,7 +210,7 @@ int	ft_printf(const char *fmt, ...)
 			else if (*fmt == 'p')
 				ft_handle_p(va_arg(ap, void*));
 		}
-		*fmt++;
+		fmt++;
 	}
 	va_end(ap);
 	return (0);
