@@ -144,18 +144,11 @@ void	ft_handle_flags(const char *fmt, va_list ap)
 		ft_handle_plus(fmt, ap);
 }
 
-void	ft_handle_c_s(const char *fmt, va_list ap)
+void	ft_handle_s(const char *fmt, va_list ap)
 {
-	char	c;
 	char	*str;
 
-	if (*fmt == 'c')
-	{
-		c = va_arg(ap, char);
-		if (ft_isprint(c))
-			ft_putchar(c);
-	}
-	else if (*fmt == 's')
+	if (*fmt == 's')
 	{
 		str = va_arg(ap, char*);
 		if (str != NULL)
@@ -212,6 +205,13 @@ void	ft_handle_p(const char *fmt, va_list ap)
 	}
 }
 
+char	ft_handle_c(char const fmt)
+{
+	if (ft_isprint(fmt))
+		ft_putchar(fmt);
+	return (fmt);
+}
+
 int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
@@ -231,8 +231,10 @@ int	ft_printf(const char *fmt, ...)
 				ft_handle_flags(fmt, ap);
 				*fmt++;
 			}
-			else if (*fmt == 'c' || *fmt == 's')
-				ft_handle_c_s(fmt, ap);
+			else if (*fmt == 's')
+				ft_handle_s(fmt, ap);
+			else if (*fmt == 'c')
+				ft_handle_c(va_arg(ap, char));
 			else if (*fmt == 'd' || *fmt == 'i')
 				ft_handle_d_i(fmt, ap);
 			else if (*fmt == 'u')
@@ -251,10 +253,10 @@ int	ft_printf(const char *fmt, ...)
 #include <stdio.h>
 
 int main() {
-	int	num = 42;
-	int	num2 = 24;
-	int	num3 = 0;
-	ft_printf("num -> %d -> num2 %d -> num3 %d\n", num, num2, num3);
-	printf("num -> %d -> num2 %d -> num3 %d\n", num, num2, num3);
+	int	c = 'a';
+	int	c1 = 'b';
+	int	c2 = 'c';
+	ft_printf("c : %c : c1 %c : c2 %c\n", c, c1, c2);
+	printf("c : %c : c1 %c : c2 %c\n", c, c1, c2);
 }
 
