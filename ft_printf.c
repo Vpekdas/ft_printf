@@ -205,11 +205,10 @@ void	ft_handle_p(const char *fmt, va_list ap)
 	}
 }
 
-char	ft_handle_c(char const fmt)
+void	ft_handle_c(char const fmt)
 {
 	if (ft_isprint(fmt))
 		ft_putchar(fmt);
-	return (fmt);
 }
 
 int	ft_printf(const char *fmt, ...)
