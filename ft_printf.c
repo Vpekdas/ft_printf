@@ -70,11 +70,8 @@ void	ft_putnbr_base(int nbr, char *base)
 		ft_putchar(result[i-- - 1]);
 }
 
-void ft_handle_sharp(const char *fmt, va_list ap)
+void ft_handle_sharp(int value, const char *fmt)
 {
-	int	value;
-
-	value = va_arg(ap, int);
 	if (*fmt == '#')
 	*fmt++;
 	if (*fmt == 'o')
@@ -96,11 +93,8 @@ void ft_handle_sharp(const char *fmt, va_list ap)
 	}
 }
 
-void	ft_handle_space(const char *fmt, va_list ap)
+void	ft_handle_space(int value, const char *fmt)
 {
-	int	value;
-
-	value = va_arg(ap, int);
 	if (*fmt == ' ')
 	*fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
@@ -115,11 +109,8 @@ void	ft_handle_space(const char *fmt, va_list ap)
 	}
 }
 
-void	ft_handle_plus(const char *fmt, va_list ap)
+void	ft_handle_plus(int value, const char *fmt)
 {
-	int	value;
-
-	value = va_arg(ap, int);
 	if (*fmt == '+')
 	*fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
@@ -201,9 +192,19 @@ int	ft_printf(const char *fmt, ...)
 			*fmt++;
 			if (*fmt == '%')
 				ft_putchar('%');
-			else if (*fmt == '#' || *fmt == ' ' || *fmt == '+')
+			else if (*fmt == '#')
 			{
-				ft_handle_flags(fmt, ap);
+				ft_handle_sharp(va_arg(ap, int), fmt);
+				*fmt++;
+			}
+			else if (*fmt == ' ')
+			{
+				ft_handle_space(va_arg(ap, int), fmt);
+				*fmt++;
+			}
+			else if (*fmt == '+')
+			{
+				ft_handle_plus(va_arg(ap, int), fmt);
 				*fmt++;
 			}
 			else if (*fmt == 's')
