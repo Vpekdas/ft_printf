@@ -163,20 +163,25 @@ void	ft_handle_c_s(const char *fmt, va_list ap)
 	}
 }
 
-void	ft_handle_d_i_u(const char *fmt, va_list ap)
+void	ft_handle_u(const char *fmt, va_list ap)
+{
+	unsigned int	u_value;
+
+	if (*fmt == 'u')
+	{
+		u_value = va_arg(ap, unsigned int);
+		ft_putnbr(u_value);
+	}
+}
+
+void	ft_handle_d_i(const char *fmt, va_list ap)
 {
 	int				value;
-	unsigned int	u_value;
 
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		value = va_arg(ap, int);
 		ft_putnbr(value);
-	}
-	else if (*fmt == 'u')
-	{
-		u_value = va_arg(ap, unsigned int);
-		ft_putnbr(u_value);
 	}
 }
 
@@ -192,6 +197,18 @@ void	ft_handle_x_X(const char *fmt, va_list ap)
 	else if (*fmt == 'X')
 	{
 		ft_putnbr_base(value, "0123456789ABCDEF");
+	}
+}
+
+void	ft_handle_p(const char *fmt, va_list ap)
+{
+	void	*ptr;
+
+	ptr = va_arg(ap, void *);
+	if (ptr != NULL)
+	{
+		write(1, "0x", 3);
+		ft_putnbr_base((unsigned long long)ptr, "0123456789abcdef");
 	}
 }
 
@@ -216,10 +233,14 @@ int	ft_printf(const char *fmt, ...)
 			}
 			else if (*fmt == 'c' || *fmt == 's')
 				ft_handle_c_s(fmt, ap);
-			else if (*fmt == 'd' || *fmt == 'i' || *fmt == 'u')
-				ft_handle_d_i_u(fmt, ap);
+			else if (*fmt == 'd' || *fmt == 'i')
+				ft_handle_d_i(fmt, ap);
+			else if (*fmt == 'u')
+				ft_handle_u(fmt,*fmt);
 			else if (*fmt == 'x' || *fmt == 'X')
 				ft_handle_x_X(fmt, ap);
+			else if (*fmt == 'p')
+				ft_handle_p(fmt, ap);
 		}
 		*fmt++;
 	}
@@ -230,42 +251,10 @@ int	ft_printf(const char *fmt, ...)
 #include <stdio.h>
 
 int main() {
-    int num = 42;
-    int num2 = -42;
-	char	c = 'a';
-	char	str[] = "hello this is a test";
-	unsigned int num3 = 123456789;
-
-	ft_printf("%#o\n", num);
-	printf("%#o\n", num);
-	ft_printf("%#x\n", num);
-	printf("%#x\n", num);
-	ft_printf("%#X\n", num);
-	printf("%#X\n", num);
-	ft_printf("% d\n", num);
-	printf("% d\n", num);
-	ft_printf("% d\n", num2);
-	printf("% d\n", num2);
-	ft_printf("%+d\n", num);
-	printf("%+d\n", num);
-	ft_printf("%+d\n", num2);
-	printf("%+d\n", num2);
-	ft_printf("%c\n", c);
-	printf("%c\n", c);
-	ft_printf("%s\n", str);
-	printf("%s\n", str);
-	ft_printf("%d\n", num);
-	printf("%d\n", num);
-	ft_printf("%i\n", num);
-	printf("%i\n", num);
-	ft_printf("%u\n", num);
-	printf("%u\n", num);
-	ft_printf("%u\n", num);
-	printf("%u\n", num);
-	ft_printf("%x\n", num);
-	printf("%x\n", num);
-	ft_printf("%X\n", num);
-	printf("%X\n", num);
-    return 0;
+	int	num = 42;
+	int	num2 = 24;
+	int	num3 = 0;
+	ft_printf("num -> %d -> num2 %d -> num3 %d\n", num, num2, num3);
+	printf("num -> %d -> num2 %d -> num3 %d\n", num, num2, num3);
 }
 
