@@ -45,7 +45,7 @@ void	ft_putnbr(int nb)
 	}
 }
 
-void	ft_putnbr_base(int nbr, char *base)
+void	ft_putnbr_base(uintptr_t nbr, char *base)
 {
 	long int		i;
 	char			result [100];
