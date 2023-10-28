@@ -129,6 +129,8 @@ void	ft_handle_s(const char *str)
 {
 	if (str != NULL)
 		ft_putstr(str);
+	else
+		ft_putstr("(null)");
 }
 
 void	ft_handle_u(unsigned int value)
@@ -157,15 +159,48 @@ void	ft_handle_p(void* ptr)
 {
 	if (ptr != NULL)
 	{
-		write(1, "0x", 3);
+		write(1, "0x", 2);
 		ft_putnbr_base((unsigned long long)ptr, "0123456789abcdef");
 	}
+	else
+		write(1, "0x0", 3);
 }
 
 void	ft_handle_c(int fmt)
 {
-	if (ft_isprint(fmt))
 		ft_putchar(fmt);
+}
+
+void	ft_handle_flags(const char *fmt, va_list *ap)
+{
+	if (*fmt == '#')
+	{
+		ft_handle_sharp(va_arg(*ap, int), fmt);
+	}
+	else if (*fmt == ' ')
+	{
+		ft_handle_space(va_arg(*ap, int), fmt);
+	}
+	else if (*fmt == '+')
+	{
+		ft_handle_plus(va_arg(*ap, int), fmt);
+	}
+}
+
+void	ft_handle_mandatory(const char *fmt, va_list *ap)
+{
+	if (*fmt == 's')
+		ft_handle_s(va_arg(*ap, char*));
+	else if (*fmt == 'c')
+		ft_handle_c(va_arg(*ap, int));
+	else if (*fmt == 'd' || *fmt == 'i')
+		ft_handle_d_i(va_arg(*ap, int));
+	else if (*fmt == 'u')
+		ft_handle_u(va_arg(*ap, unsigned int));
+	else if (*fmt == 'x' || *fmt == 'X')
+		ft_handle_x_X(*fmt, va_arg(*ap, int));
+	else if (*fmt == 'p')
+		ft_handle_p(va_arg(*ap, void*));
 }
 
 int	ft_printf(const char *fmt, ...)
@@ -182,33 +217,8 @@ int	ft_printf(const char *fmt, ...)
 			fmt++;
 			if (*fmt == '%')
 				ft_putchar('%');
-			else if (*fmt == '#')
-			{
-				ft_handle_sharp(va_arg(ap, int), fmt);
-				fmt++;
-			}
-			else if (*fmt == ' ')
-			{
-				ft_handle_space(va_arg(ap, int), fmt);
-				fmt++;
-			}
-			else if (*fmt == '+')
-			{
-				ft_handle_plus(va_arg(ap, int), fmt);
-				fmt++;
-			}
-			else if (*fmt == 's')
-				ft_handle_s(va_arg(ap, char*));
-			else if (*fmt == 'c')
-				ft_handle_c(va_arg(ap, int));
-			else if (*fmt == 'd' || *fmt == 'i')
-				ft_handle_d_i(va_arg(ap, int));
-			else if (*fmt == 'u')
-				ft_handle_u(va_arg(ap, unsigned int));
-			else if (*fmt == 'x' || *fmt == 'X')
-				ft_handle_x_X(*fmt, va_arg(ap, int));
-			else if (*fmt == 'p')
-				ft_handle_p(va_arg(ap, void*));
+			ft_handle_mandatory(fmt, &ap);
+			ft_handle_flags(fmt, &ap);
 		}
 		fmt++;
 	}
@@ -219,6 +229,46 @@ int	ft_printf(const char *fmt, ...)
 #include <stdio.h>
 
 int main() {
-	
-}
+    // char character = 'A';
+    // ft_printf("Character: %c\n", character);
+    // printf("Character: %c\n", character);
 
+    // ft_printf("Newline: %c\n", '\n');
+    // printf("Newline: %c\n", '\n');
+    // ft_printf("Tab: %c\n", '\t');
+    // printf("Tab: %c\n", '\t');
+
+    // char char1 = 'X';
+    // char char2 = 'Y';
+    // ft_printf("Characters: %c %c\n", char1, char2);
+    // printf("Characters: %c %c\n", char1, char2);
+
+    // ft_printf("Empty: %c\n", '\0');
+    // printf("Empty: %c\n", '\0');
+
+    // ft_printf("Multiple Characters: %c %c\n", 'A', 'B');
+	// printf("Multiple Characters: %c %c\n", 'A', 'B');
+
+    // char* str = "Hello, World!";
+    // ft_printf("String: %s\n", str);
+    // printf("String: %s\n", str);
+
+    // char* empty_str = "";
+    // ft_printf("Empty String: %s\n", empty_str);
+    // printf("Empty String: %s\n", empty_str);
+
+    // char* null_str = NULL;
+    // ft_printf("Null String: %s\n", null_str);
+    // printf("Null String: %s\n", null_str);
+
+    void *ptr1 = (void*)0x7fff5c6b4a90;
+    void *ptr2 = NULL;
+
+    ft_printf("Pointer: %p\n", ptr1);
+    printf("Pointer: %p\n", ptr1);
+
+    ft_printf("Null Pointer: %p\n", ptr2);
+    printf("Null Pointer: %p\n", ptr2);
+
+    return 0;
+}
