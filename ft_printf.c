@@ -173,8 +173,8 @@ void	ft_handle_c(int fmt)
 
 void	ft_handle_flags(const char **fmt, va_list *ap)
 {
-	if (**fmt == ' ' && *(*fmt + 1) == '+' || 
-		**fmt == '+' && *(*fmt + 1) == ' ')
+	if (**fmt == ' ' && *(*fmt + 1) == '+'
+		|| **fmt == '+' && *(*fmt + 1) == ' ')
 	{
 		ft_handle_plus(va_arg(*ap, int), *fmt);
 	    (*fmt)++;
