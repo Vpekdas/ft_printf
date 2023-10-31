@@ -9,9 +9,10 @@ int	ft_isprint(int c)
 		return (0);
 }
 
-static void	ft_putchar(const char c)
+int ft_putchar(const char c)
 {
 	write(1, &c, 1);
+	return (1);
 }
 
 void	ft_putstr(const char *str)
@@ -26,30 +27,36 @@ void	ft_putstr(const char *str)
 	}
 }
 
-void	ft_putnbr(int nb)
+int	ft_putnbr(int nb)
 {
 	long int	nbr;
+	int			len;
 
 	nbr = nb;
+	len = 0;
 	if (nbr < 0)
 	{
-		ft_putchar('-');
+		len += ft_putchar('-');
 		nbr *= -1;
 	}
 	if (nbr < 10)
-		ft_putchar(nbr + '0');
+	{
+		len += ft_putchar(nbr + '0');
+	}
 	else
 	{
-		ft_putnbr(nbr / 10);
-		ft_putnbr(nbr % 10);
+		len += ft_putnbr(nbr / 10);
+		len += ft_putnbr(nbr % 10);
 	}
+	return (len);
 }
 
-void	ft_putnbr_base(uintptr_t nbr, char *base)
+int	ft_putnbr_base(uintptr_t nbr, char *base)
 {
 	long int		i;
 	char			result [100];
 	long int		nb;
+	int 			len;
 
 	if (nbr == 0)
 		ft_putchar(base[0]);
@@ -66,182 +73,260 @@ void	ft_putnbr_base(uintptr_t nbr, char *base)
 		nb /= ft_strlen(base);
 		i++;
 	}
+	len = i;
 	while (i > 0)
 		ft_putchar(result[i-- - 1]);
+	return (len);
 }
 
-void ft_handle_sharp(int value, const char *fmt)
+int ft_handle_sharp(int value, const char *fmt)
 {
+	int len;
+
+	len = 0;
 	if (*fmt == '#')
 	fmt++;
 	if (*fmt == 'o')
 	{
-		write(1, "0", 1);
-		ft_putnbr_base(value, "01234567");
+		len += write(1, "0", 1);
+		len += ft_putnbr_base(value, "01234567");
 	}
 	else if (*fmt == 'x')
 	{
-		write(1, "0", 1);
-		write(1, &*fmt, 1);
-		ft_putnbr_base(value, "0123456789abcdef");
+		len += write(1, "0", 1);
+		len += write(1, &*fmt, 1);
+		len += ft_putnbr_base(value, "0123456789abcdef");
 	}
 	else if (*fmt == 'X')
 	{
-		write(1, "0", 1);
-		write(1, &*fmt, 1);
-		ft_putnbr_base(value, "0123456789ABCDEF");
+		len += write(1, "0", 1);
+		len += write(1, &*fmt, 1);
+		len += ft_putnbr_base(value, "0123456789ABCDEF");
 	}
+	return (len);
 }
 
-void	ft_handle_space(int value, const char *fmt)
+int	ft_handle_space(int value, const char *fmt)
 {
+	int len;
+
+	len = 0;
 	if (*fmt == ' ')
 	fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		if (value >= 0)
 		{
-			ft_putchar(' ');
-			ft_putnbr(value);
+			len += ft_putchar(' ');
+			len += ft_putnbr(value);
 		}
 		else
-			ft_putnbr(value);
+			len += ft_putnbr(value);
 	}
+	return (len);
 }
 
-void	ft_handle_plus(int value, const char *fmt)
+int	ft_handle_plus(int value, const char *fmt)
 {
+	int len;
+
+	len = 0;
 	while (*fmt == '+' || *fmt == ' ')
 	fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		if (value >= 0)
 		{
-			ft_putchar('+');
-			ft_putnbr(value);
+			len += ft_putchar('+');
+			len += ft_putnbr(value);
 		}
 		else
-			ft_putnbr(value);
+			len += ft_putnbr(value);
 	}
+	return (len);
 }
 
-void	ft_handle_s(const char *str)
+int	ft_handle_s(const char *str)
 {
+	int	len;
+
+	len = ft_strlen(str);
 	if (str != NULL)
 		ft_putstr(str);
 	else
 		ft_putstr("(null)");
+	return (len);
 }
 
-void	ft_handle_u(unsigned int value)
+int ft_handle_u(unsigned int value)
 {
-	ft_putnbr(value);
+	int len;
+
+	len = ft_putnbr(value);
+	return (len);
 }
 
-void	ft_handle_d_i(int value)
+int	ft_handle_d_i(int value)
 {
-	ft_putnbr(value);
+	int len;
+
+	len = ft_putnbr(value);
+	return (len);
 }
 
-void	ft_handle_x_X(const char c, int value)
+int	ft_handle_x_X(const char c, int value)
 {
+	int len;
+
 	if (c == 'x')
 	{
-		ft_putnbr_base(value, "0123456789abcdef");
+		len = ft_putnbr_base(value, "0123456789abcdef");
 	}
 	else if (c == 'X')
 	{
-		ft_putnbr_base(value, "0123456789ABCDEF");
+		len = ft_putnbr_base(value, "0123456789ABCDEF");
 	}
+	return (len);
 }
 
-void	ft_handle_p(void* ptr)
+int	ft_handle_p(void* ptr)
 {
+	int len;
+
+	len = 0;
 	if (ptr != NULL)
 	{
 		write(1, "0x", 2);
-		ft_putnbr_base((unsigned long long)ptr, "0123456789abcdef");
+		len = 2;
+		len += ft_putnbr_base((uintptr_t)ptr, "0123456789abcdef");
 	}
 	else
+	{
 		write(1, "0x0", 3);
+		len = 3;
+	}
+	return (len);
 }
 
-void	ft_handle_c(int fmt)
+int	ft_handle_c(int fmt)
 {
-		ft_putchar(fmt);
+	int len;
+
+	len = ft_putchar(fmt);
+	return (len);
 }
 
-void	ft_handle_flags(const char **fmt, va_list *ap)
+int	ft_handle_flags(const char **fmt, va_list *ap)
 {
+	int len;
+
+	len = 0;
 	if (**fmt == ' ' && *(*fmt + 1) == '+'
 		|| **fmt == '+' && *(*fmt + 1) == ' ')
 	{
-		ft_handle_plus(va_arg(*ap, int), *fmt);
-	    (*fmt)++;
-		(*fmt)++;
+		len += ft_handle_plus(va_arg(*ap, int), *fmt);
+	(*fmt)++;
+	(*fmt)++;
 	}
 	else if (**fmt == '+')
 	{
-		ft_handle_plus(va_arg(*ap, int), *fmt);
-	    (*fmt)++;
+		len += ft_handle_plus(va_arg(*ap, int), *fmt);
+	(*fmt)++;
 	}
 	else if (**fmt == ' ')
 	{
-		ft_handle_space(va_arg(*ap, int), *fmt);
+		len += ft_handle_space(va_arg(*ap, int), *fmt);
 		(*fmt)++;
 	}
 	else if (**fmt == '#')
 	{
-		ft_handle_sharp(va_arg(*ap, int), *fmt);
+		len += ft_handle_sharp(va_arg(*ap, int), *fmt);
 		(*fmt)++;
 	}
+	return (len);
 }
 
-void	ft_handle_mandatory(const char *fmt, va_list *ap)
+int	ft_handle_mandatory(const char *fmt, va_list *ap)
 {
+	int len;
+
+	len = 0;
 	if (*fmt == 's')
-		ft_handle_s(va_arg(*ap, char*));
+		len += ft_handle_s(va_arg(*ap, char*));
 	else if (*fmt == 'c')
-		ft_handle_c(va_arg(*ap, int));
+		len += ft_handle_c(va_arg(*ap, int));
 	else if (*fmt == 'd' || *fmt == 'i')
-		ft_handle_d_i(va_arg(*ap, int));
+		len += ft_handle_d_i(va_arg(*ap, int));
 	else if (*fmt == 'u')
-		ft_handle_u(va_arg(*ap, unsigned int));
+		len += ft_handle_u(va_arg(*ap, unsigned int));
 	else if (*fmt == 'x' || *fmt == 'X')
-		ft_handle_x_X(*fmt, va_arg(*ap, int));
+		len += ft_handle_x_X(*fmt, va_arg(*ap, int));
 	else if (*fmt == 'p')
-		ft_handle_p(va_arg(*ap, void*));
+		len += ft_handle_p(va_arg(*ap, void*));
+	return (len);
 }
 
 int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
+	int		len;
 
+	len = 0;
 	va_start(ap, fmt);
 	while (*fmt)
 	{
 		if (*fmt != '%')
-			ft_putchar(*fmt);
+			len += ft_putchar(*fmt);
 		else
 		{
 			fmt++;
 			if (*fmt == '%')
-				ft_putchar('%');
-			ft_handle_mandatory(fmt, &ap);
-			ft_handle_flags(&fmt, &ap);
+				len += ft_putchar('%');
+			len += ft_handle_mandatory(fmt, &ap);
+			len += ft_handle_flags(&fmt, &ap);
 		}
 		fmt++;
 	}
 	va_end(ap);
-	return (0);
+	return (len);
 }
 
 #include <stdio.h>
 
-int main() {
-int number = 42;
-ft_printf("Combined Flags: %+ d\n", number);
-printf("Combined Flags: %+ d\n", number);
 
-    return 0;
+int main() {
+    int num = 42;
+    char *str = "Hello, World!";
+    char c = 'A';
+    int *ptr = &num;
+
+	int	my_print;
+	int	orig_print;
+
+    my_print = ft_printf("Testing integers: %d %i %x %X %+d %u\n", num, num, num, num, num, num);
+	ft_printf("NUMBER OF CHAR %d\n", my_print);
+    orig_print = printf("Testing integers: %d %i %x %X %+d %u\n", num, num, num, num, num, num);
+	printf("NUMBER OF CHAR %d\n", orig_print);
+
+   my_print = ft_printf("Testing strings and characters: %s %c\n", str, c);
+   	ft_printf("NUMBER OF CHAR %d\n", my_print);
+    orig_print = printf("Testing strings and characters: %s %c\n", str, c);
+	printf("NUMBER OF CHAR %d\n", orig_print);
+
+    my_print = ft_printf("Testing pointers: %p\n", ptr);
+	ft_printf("NUMBER OF CHAR %d\n", my_print);
+    orig_print = printf("Testing pointers: %p\n", ptr);
+	printf("NUMBER OF CHAR %d\n", orig_print);
+
+    my_print = ft_printf("Testing mixed formats: %d %s %x %c %p\n", num, str, num, c, ptr);
+	ft_printf("NUMBER OF CHAR %d\n", my_print);
+    orig_print = printf("Testing mixed formats: %d %s %x %c %p\n", num, str, num, c, ptr);
+	printf("NUMBER OF CHAR %d\n", orig_print);
+
+    my_print = ft_printf("Testing %% character: 100%%\n");
+	ft_printf("NUMBER OF CHAR %d\n", my_print);
+    orig_print = printf("Testing %% character: 100%%\n");
+	printf("NUMBER OF CHAR %d\n", orig_print);
+
+	return 0;
 }
