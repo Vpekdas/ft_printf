@@ -124,14 +124,14 @@ static int ft_handle_sharp(long long value, const char *fmt)
 	}
 	else if (*fmt == 'x')
 	{
-		len += write(1, "0", 1);
-		len += write(1, "x", 1);
+        if (value != 0 && value != LONG_MIN)
+			len += write(1, "0x", 2);
 		len += ft_putnbr_base(value, "0123456789abcdef");
 	}
 	else if (*fmt == 'X')
 	{
-		len += write(1, "0", 1);
-		len += write(1, "X", 1);
+        if (value != 0 && value != LONG_MIN)
+			len += write(1, "0X", 2);
 		len += ft_putnbr_base(value, "0123456789ABCDEF");
 	}
 	return (len);
@@ -148,11 +148,11 @@ static int	ft_handle_space(int value, const char *fmt)
 	{
 		if (value >= 0)
 		{
-			len += ft_putchar(' ');
+			len = ft_putchar(' ');
 			len += ft_putnbr(value);
 		}
 		else
-			len += ft_putnbr(value);
+			len = ft_putnbr(value);
 	}
 	return (len);
 }
@@ -181,11 +181,14 @@ static int	ft_handle_s(const char *str)
 {
 	int	len;
 
-	len = ft_strlen(str);
 	if (str != NULL)
 		ft_putstr(str);
 	else
-		ft_putstr("(null");
+	{
+		ft_putstr("(null)");
+		return (6);
+	}
+	len = ft_strlen(str);
 	return (len);
 }
 
@@ -256,23 +259,23 @@ static int	ft_handle_flags(const char **fmt, va_list *ap)
 	if (((**fmt == ' ') && *(*fmt + 1) == '+')
 		|| (**fmt == '+' && *(*fmt + 1) == ' '))
 	{
-		len += ft_handle_plus(va_arg(*ap, int), *fmt);
+		len = ft_handle_plus(va_arg(*ap, int), *fmt);
 	(*fmt)++;
 	(*fmt)++;
 	}
 	else if (**fmt == '+')
 	{
-		len += ft_handle_plus(va_arg(*ap, int), *fmt);
+		len = ft_handle_plus(va_arg(*ap, int), *fmt);
 		(*fmt)++;
 	}
 	else if (**fmt == ' ')
 	{
-		len += ft_handle_space(va_arg(*ap, int), *fmt);
+		len = ft_handle_space(va_arg(*ap, int), *fmt);
 		(*fmt)++;
 	}
 	else if (**fmt == '#')
 	{
-		len += ft_handle_sharp(va_arg(*ap, long long), *fmt);
+		len = ft_handle_sharp(va_arg(*ap, long long), *fmt);
 		(*fmt)++;
 	}
 	return (len);
