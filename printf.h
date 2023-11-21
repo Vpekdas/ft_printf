@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:06:45 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/21 16:27:50 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:34:42 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		ft_putnbr_base(unsigned int nb, char *base);
 int		ft_handle_s(const char *str);
 int		ft_handle_u(unsigned int value);
 int		ft_handle_d_i(int value);
-int		ft_handle_x_X(const char c, long long value);
+int		ft_handle_x_x(const char c, long long value);
 int		ft_handle_p(void*ptr);
 int		ft_handle_c(int fmt);
 int		ft_handle_sharp(long long value, const char *fmt);
