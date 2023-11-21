@@ -1,259 +1,20 @@
-#include <stdarg.h>
-#include "ft_printf.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/21 16:02:38 by vopekdas          #+#    #+#             */
+/*   Updated: 2023/11/21 16:23:01 by vopekdas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
+#include "printf.h"
 
-	i = 0;
-	while (s[i])
-	{
-		i++;
-	}
-	return (i);
-}
-
-static int ft_putchar(const char c)
-{
-	write(1, &c, 1);
-	return (1);
-}
-
-static void	ft_putstr(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-}
-
-static int	ft_putnbr(long long nbr)
-{
-	int			len;
-
-	len = 0;
-	if (nbr < 0)
-	{
-		len += ft_putchar('-');
-		nbr *= -1;
-	}
-	if (nbr < 10)
-	{
-		len += ft_putchar(nbr + '0');
-	}
-	else
-	{
-		len += ft_putnbr(nbr / 10);
-		len += ft_putnbr(nbr % 10);
-	}
-	return (len);
-}
-static int	ft_putnbr_base_p(uintptr_t nb, char *base)
-{
-	long long		i;
-	char			result [100];
-	int				len;
-
-	if (nb == 0)
-	{
-		ft_putchar(base[0]);
-		return (1);
-	}
-	i = 0;
-	if (nb < 0)
-	{
-		ft_putchar('-');
-		nb *= -1;
-	}
-	while (nb > 0)
-	{
-		result[i] = base[nb % ft_strlen(base)];
-		nb /= ft_strlen(base);
-		i++;
-	}
-	len = i;
-	while (i > 0)
-		ft_putchar(result[i-- - 1]);
-	return (len);
-}
-
-static int	ft_putnbr_base(unsigned int nb, char *base)
-{
-	long long		i;
-	char			result [100];
-	int				len;
-
-	if (nb == 0)
-	{
-		ft_putchar(base[0]);
-		return (1);
-	}
-	i = 0;
-	if (nb < 0)
-	{
-		ft_putchar('-');
-		nb *= -1;
-	}
-	while (nb > 0)
-	{
-		result[i] = base[nb % ft_strlen(base)];
-		nb /= ft_strlen(base);
-		i++;
-	}
-	len = i;
-	while (i > 0)
-		ft_putchar(result[i-- - 1]);
-	return (len);
-}
-
-static int ft_handle_sharp(long long value, const char *fmt)
-{
-	int len;
-
-	len = 0;
-	if (*fmt == '#')
-	fmt++;
-	if (*fmt == 'o')
-	{
-		len += write(1, "0", 1);
-		len += ft_putnbr_base(value, "01234567");
-	}
-	else if (*fmt == 'x')
-	{
-        if (value != 0 && value != LONG_MIN)
-			len += write(1, "0x", 2);
-		len += ft_putnbr_base(value, "0123456789abcdef");
-	}
-	else if (*fmt == 'X')
-	{
-        if (value != 0 && value != LONG_MIN)
-			len += write(1, "0X", 2);
-		len += ft_putnbr_base(value, "0123456789ABCDEF");
-	}
-	return (len);
-}
-
-static int	ft_handle_space(int value, const char *fmt)
-{
-	int len;
-
-	len = 0;
-	if (*fmt == ' ')
-	fmt++;
-	if (*fmt == 'd' || *fmt == 'i')
-	{
-		if (value >= 0)
-		{
-			len = ft_putchar(' ');
-			len += ft_putnbr(value);
-		}
-		else
-			len = ft_putnbr(value);
-	}
-	return (len);
-}
-
-static int	ft_handle_plus(int value, const char *fmt)
-{
-	int len;
-
-	len = 0;
-	while (*fmt == '+' || *fmt == ' ')
-	fmt++;
-	if (*fmt == 'd' || *fmt == 'i')
-	{
-		if (value >= 0)
-		{
-			len += ft_putchar('+');
-			len += ft_putnbr(value);
-		}
-		else
-			len += ft_putnbr(value);
-	}
-	return (len);
-}
-
-static int	ft_handle_s(const char *str)
+int	ft_handle_flags(const char **fmt, va_list *ap)
 {
 	int	len;
-
-	if (str != NULL)
-		ft_putstr(str);
-	else
-	{
-		ft_putstr("(null)");
-		return (6);
-	}
-	len = ft_strlen(str);
-	return (len);
-}
-
-static int ft_handle_u(unsigned int value)
-{
-	int len;
-
-	len = ft_putnbr(value);
-	return (len);
-}
-
-static int	ft_handle_d_i(int value)
-{
-	int len;
-
-	len = ft_putnbr(value);
-	return (len);
-}
-
-static int	ft_handle_x_X(const char c, long long value)
-{
-	int len;
-
-	len = 0;
-	if (c == 'x')
-	{
-		len = ft_putnbr_base(value, "0123456789abcdef");
-	}
-	else if (c == 'X')
-	{
-		len = ft_putnbr_base(value, "0123456789ABCDEF");
-	}
-	return (len);
-}
-
-static int ft_handle_p(void* ptr)
-{
-	int	len;
-
-	len = 0;
-	if (ptr != NULL)
-	{
-		write(1, "0x", 2);
-        len = ft_putnbr_base_p((uintptr_t)ptr, "0123456789abcdef") + 2;
-	}
-	else
-	{
-		write(1, "0x0", 3);
-        len = 3;
-	}
-	return (len);
-}
-
-
-static int	ft_handle_c(int fmt)
-{
-	int len;
-
-	len = ft_putchar(fmt);
-	return (len);
-}
-
-static int	ft_handle_flags(const char **fmt, va_list *ap)
-{
-	int len;
 
 	len = 0;
 	if (((**fmt == ' ') && *(*fmt + 1) == '+')
@@ -281,9 +42,9 @@ static int	ft_handle_flags(const char **fmt, va_list *ap)
 	return (len);
 }
 
-static int	ft_handle_mandatory(const char *fmt, va_list *ap)
+int	ft_handle_mandatory(const char *fmt, va_list *ap)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (*fmt == 's')

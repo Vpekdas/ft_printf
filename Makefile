@@ -6,23 +6,24 @@
 #    By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 14:36:07 by vopekdas          #+#    #+#              #
-#    Updated: 2023/11/09 15:36:24 by vopekdas         ###   ########.fr        #
+#    Updated: 2023/11/21 16:28:27 by vopekdas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SOURCES =  ft_printf.c
-
-BONUS = ft_printf.c
+SOURCES =  ft_printf.c \
+			handle_flags.c \
+			handle_mandatory.c \
+			handle_mandatory2.c \
+			printf_utils.c \
+			putnbr_base_utils.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
-BONUS_OBJECTS = $(BONUS:.c=.o)
-
 CC=cc
 
-CFLAGS=-Wall -Wextra -Werror -Iincludes
+CFLAGS=-Wall -Wextra -Werror
 
 RM = rm -f
 
