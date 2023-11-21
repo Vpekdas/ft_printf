@@ -6,24 +6,24 @@
 #    By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 14:36:07 by vopekdas          #+#    #+#              #
-#    Updated: 2023/11/21 16:28:27 by vopekdas         ###   ########.fr        #
+#    Updated: 2023/11/21 16:46:36 by vopekdas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SOURCES =  ft_printf.c \
-			handle_flags.c \
-			handle_mandatory.c \
-			handle_mandatory2.c \
-			printf_utils.c \
-			putnbr_base_utils.c
+SOURCES =  src/ft_printf.c \
+			src/handle_flags.c \
+			src/handle_mandatory.c \
+			src/handle_mandatory2.c \
+			src/printf_utils.c \
+			src/putnbr_base_utils.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
 CC=cc
 
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=-Wall -Wextra -Werror -Iinclude
 
 RM = rm -f
 
