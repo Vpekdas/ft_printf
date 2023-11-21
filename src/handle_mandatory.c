@@ -71,8 +71,7 @@ int	ft_handle_p(void*ptr)
 	}
 	else
 	{
-		write(1, "(nil)", 5);
-		len = 5;
+		len = write(1, "0x0", 3);
 	}
 	return (len);
 }
