@@ -6,11 +6,11 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:19:57 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/21 16:46:04 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:12:19 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 int	ft_handle_s(const char *str)
 {
@@ -71,8 +71,8 @@ int	ft_handle_p(void*ptr)
 	}
 	else
 	{
-		write(1, "0x0", 3);
-		len = 3;
+		write(1, "(nil)", 5);
+		len = 5;
 	}
 	return (len);
 }
