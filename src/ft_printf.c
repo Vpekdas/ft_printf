@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:02:38 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/22 11:48:02 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/22 13:03:23 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,3 +85,4 @@ int	ft_printf(const char *fmt, ...)
 	va_end(ap);
 	return (len);
 }
+

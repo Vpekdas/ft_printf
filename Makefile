@@ -6,7 +6,7 @@
 #    By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 14:36:07 by vopekdas          #+#    #+#              #
-#    Updated: 2023/11/22 11:08:08 by vopekdas         ###   ########.fr        #
+#    Updated: 2023/11/22 12:39:40 by vopekdas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,11 @@ all: $(NAME)
 $(NAME): $(OBJECTS)
 	ar r $(NAME) $(OBJECTS)
 
-bonus: $(OBJECTS) $(BONUS_OBJECTS)
-	ar r $(NAME) $(OBJECTS) $(BONUS_OBJECTS)
+bonus: $(OBJECTS)
+	ar r $(NAME) $(OBJECTS)
 
 clean:
-	$(RM) $(OBJECTS) $(BONUS_OBJECTS)
+	$(RM) $(OBJECTS)
 
 fclean: clean
 	$(RM) $(NAME)
