@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:17:15 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/21 16:56:30 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:20:42 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_putstr(const char *str)
 
 int	ft_putnbr(long long nbr)
 {
-	int			len;
+	int	len;
 
 	len = 0;
 	if (nbr < 0)

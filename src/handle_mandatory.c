@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:19:57 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/21 17:12:19 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:34:16 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	ft_handle_s(const char *str)
 {
 	int	len;
 
+	len = 0;
 	if (str != NULL)
 		ft_putstr(str);
 	else
@@ -31,6 +32,7 @@ int	ft_handle_u(unsigned int value)
 {
 	int	len;
 
+	len = 0;
 	len = ft_putnbr(value);
 	return (len);
 }
@@ -39,6 +41,7 @@ int	ft_handle_d_i(int value)
 {
 	int	len;
 
+	len = 0;
 	len = ft_putnbr(value);
 	return (len);
 }
@@ -71,7 +74,7 @@ int	ft_handle_p(void*ptr)
 	}
 	else
 	{
-		len = write(1, "0x0", 3);
+		len = write(1, "(nil)", 5);
 	}
 	return (len);
 }
