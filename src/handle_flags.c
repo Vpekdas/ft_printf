@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:06:19 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/22 10:33:54 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/23 11:33:19 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	ft_handle_space(int value, const char *fmt)
 	int	len;
 
 	len = 0;
-	if (*fmt == ' ')
-		fmt++;
 	if (*fmt == 'd' || *fmt == 'i')
 	{
 		if (value >= 0)
