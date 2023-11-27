@@ -6,7 +6,7 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:02:38 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/24 15:48:03 by vopekdas         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:53:46 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	ft_printf(const char *fmt, ...)
 	va_list	ap;
 	int		len;
 
+	if (!fmt)
+		return (-1);
 	len = 0;
 	va_start(ap, fmt);
 	while (*fmt)
@@ -96,11 +98,9 @@ int	ft_printf(const char *fmt, ...)
 			if (*fmt == '%')
 				len += ft_handle_percent(&fmt);
 			else
-			{
-				len += ft_handle_mandatory(&fmt, &ap);
-				len += ft_handle_flags(&fmt, &ap);
-				len += ft_handle_flags_two(&fmt, &ap);
-			}
+				len += ft_handle_mandatory(&fmt, &ap)
+					+ ft_handle_flags(&fmt, &ap)
+					+ ft_handle_flags_two(&fmt, &ap);
 		}
 	}
 	va_end(ap);
