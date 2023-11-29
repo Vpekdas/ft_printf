@@ -116,7 +116,6 @@ Here are some examples demonstrating how to use different format specifiers and 
 
 ```c
 #include "ft_printf.h"
-#include <stdio.h>
 
 int main() {
     // Example 1: Print a string
