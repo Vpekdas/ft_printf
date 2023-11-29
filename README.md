@@ -119,23 +119,23 @@ Here are some examples demonstrating how to use different format specifiers and 
 
 int main() {
     // Example 1: Print a string
-    ft_printf("String: %%s\n", "Hello, world!");
+    ft_printf("String: %s\n", "Hello, world!");
 
     // Example 2: Print an integer
-    ft_printf("Integer: %%d\n", 42);
+    ft_printf("Integer: %d\n", 42);
 
     // Example 3: Print a hexadecimal number with the '0x' prefix
-    ft_printf("Hexadecimal: %%#x\n", 255);
+    ft_printf("Hexadecimal: %#x\n", 255);
 
     // Example 4: Print a character
-    ft_printf("Character: %%c\n", 'A');
+    ft_printf("Character: %c\n", 'A');
 
     // Example 5: Print a percentage sign
-    ft_printf("Percentage: %%%%%%\n");
+    ft_printf("Percentage: %%%%%\n");
 
     // Example 6: Print a pointer address
     int variable = 123;
-    ft_printf("Pointer Address: %%p\n", (void*)&variable);
+    ft_printf("Pointer Address: %p\n", (void*)&variable);
 
     return 0;
 }
