@@ -6,12 +6,11 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:02:38 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/27 12:00:00 by vopekdas         ###   ########.fr       */
+/*   Updated: 2024/06/02 00:27:05 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_printf.h"
-#include <string.h>
+#include "../includes/ft_printf.h"
 
 int	ft_handle_flags(const char **fmt, va_list *ap)
 {

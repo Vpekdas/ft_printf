@@ -6,11 +6,11 @@
 /*   By: vopekdas <vopekdas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:18:11 by vopekdas          #+#    #+#             */
-/*   Updated: 2023/11/24 15:48:41 by vopekdas         ###   ########.fr       */
+/*   Updated: 2024/06/02 00:26:38 by vopekdas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_printf.h"
+#include "../includes/ft_printf.h"
 
 int	ft_putnbr_base_p(uintptr_t nb, char *base)
 {
