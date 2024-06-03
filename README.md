@@ -64,6 +64,168 @@ ft_printf("String: %s, Character: %c, Pointer: %p, Decimal: %d, Integer: %i, Uns
 ft_printf("Decimal: %+d, Octal: %#o, Hexadecimal: %#x\n", 123, 123, 123);
 ```
 
+The core of this printf implementation is shown below. The function ft_handle_mandatory manages the different flags by using va_arg. va_arg takes the va_list pointer as its first argument, and the type of the variable to store as its second argument.
+
+For strings and characters, I've used putchar or putstr. For 'u', 'd', or 'i', I've used putnbr. Handling 'p' was slightly more complex as it required a variable that can store a long number for an address, so I've used uintptr_t (integer types wide enough to hold pointers).
+
+Each flag is handled by a specific function (ft_handle_s, ft_handle_c, ft_handle_u, ft_handle_d_i, ft_handle_x_x, ft_handle_p, ft_handle_percent). These functions output the corresponding values and return their lengths.
+
+```c
+int	ft_handle_s(const char *str)
+{
+	int	len;
+
+	len = 0;
+	if (str != NULL)
+		ft_putstr(str);
+	else
+	{
+		ft_putstr("(null)");
+		return (6);
+	}
+	len = ft_strlen(str);
+	return (len);
+}
+
+int	ft_handle_u(unsigned int value)
+{
+	int	len;
+
+	len = 0;
+	len = ft_putnbr(value);
+	return (len);
+}
+
+int	ft_handle_d_i(int value)
+{
+	int	len;
+
+	len = 0;
+	len = ft_putnbr(value);
+	return (len);
+}
+
+int	ft_handle_x_x(const char c, long long value)
+{
+	int	len;
+
+	len = 0;
+	if (c == 'x')
+	{
+		len = ft_putnbr_base(value, "0123456789abcdef");
+	}
+	else if (c == 'X')
+	{
+		len = ft_putnbr_base(value, "0123456789ABCDEF");
+	}
+	return (len);
+}
+
+int	ft_handle_p(void*ptr)
+{
+	int	len;
+
+	len = 0;
+	if (ptr != NULL)
+	{
+		write(1, "0x", 2);
+		len = ft_putnbr_base_p((uintptr_t)ptr, "0123456789abcdef") + 2;
+	}
+	else
+	{
+		len = write(1, "(nil)", 5);
+	}
+	return (len);
+}
+
+int	ft_handle_c(int fmt)
+{
+	int	len;
+
+	len = 0;
+	len = ft_putchar(fmt);
+	return (len);
+}
+
+int	ft_handle_percent(const char **fmt)
+{
+	int	len;
+
+	len = 0;
+	len = ft_putchar('%');
+		(*fmt)++;
+	return (len);
+}
+```
+
+For the bonus part, I chose to handle only the sharp (#), space, and plus (+) flags. As a novice, I didn't see the purpose of the other flags. The approach was quite similar to the mandatory part, with the only difference being the format that I'm printing.
+
+Handling space and plus was quite straightforward. I suggest attempting at least these bonuses. The only difficulty is correctly incrementing the way you are "parsing". In the mandatory part, you can analyze character by character, but here multiple characters can be used for a flag. For example: %#x.
+
+Each flag is handled by a specific function (ft_handle_sharp, ft_handle_space, ft_handle_plus). These functions output the corresponding values and return their lengths.
+```c
+int	ft_handle_sharp(long long value, const char *fmt)
+{
+	int	len;
+
+	len = 0;
+	if (*fmt == 'o')
+	{
+		len = write(1, "0", 1);
+		len += ft_putnbr_base(value, "01234567");
+	}
+	else if (*fmt == 'x')
+	{
+		if (value != 0 && value != LONG_MIN)
+				len = write(1, "0x", 2);
+		len += ft_putnbr_base(value, "0123456789abcdef");
+	}
+	else if (*fmt == 'X')
+	{
+		if (value != 0 && value != LONG_MIN)
+			len = write(1, "0X", 2);
+		len += ft_putnbr_base(value, "0123456789ABCDEF");
+	}
+	return (len);
+}
+
+int	ft_handle_space(int value, const char **fmt)
+{
+	int	len;
+
+	len = 0;
+	if (**fmt == 'd' || **fmt == 'i')
+	{
+		if (value >= 0)
+		{
+			len = ft_putchar(' ');
+			len += ft_putnbr(value);
+		}
+		else
+			len = ft_putnbr(value);
+	}
+	return (len);
+}
+
+int	ft_handle_plus(int value, const char **fmt)
+{
+	int	len;
+
+	len = 0;
+	if (**fmt == 'd' || **fmt == 'i')
+	{
+		if (value >= 0)
+		{
+			len = ft_putchar('+');
+			len += ft_putnbr(value);
+		}
+		else
+			len = ft_putnbr(value);
+	}
+	return (len);
+}
+```
+
 ## Acknowledgments
 
 I would like to express my deepest appreciation to all those who provided the possibility to complete this project. A special gratitude I give to the contributors of the following tester programs:
