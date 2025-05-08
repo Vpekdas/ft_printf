@@ -16,8 +16,6 @@ As part of the 42 curriculum, this project comes with strict coding guidelines:
 - A strict rule of 5 functions per file and 25 lines per function is enforced.
 - There are restrictions such as no assignments on the same line and a focus on clean, maintainable code.
 
-This project provides hands-on experience with low-level graphical programming and reinforces good coding practices under challenging constraints.
-
 ### Purpose
 
 The ft_printf function replicates the behavior of the standard C printf, enabling formatted output to the standard output. It supports a selection of commonly used format specifiers.
